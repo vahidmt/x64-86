@@ -1,0 +1,34 @@
+name: Build EXE
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        arch: [x86, x64]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          architecture: ${{ matrix.arch }}
+
+      - run: pip install pywin32 pyinstaller
+
+      - run: pyinstaller --onefile --name print_ticket_${{ matrix.arch }} print_ticket.py
+      - run: pyinstaller --onefile --name installer_${{ matrix.arch }} installer.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: print_ticket_${{ matrix.arch }}
+          path: dist/print_ticket_${{ matrix.arch }}.exe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: installer_${{ matrix.arch }}
+          path: dist/installer_${{ matrix.arch }}.exe
