@@ -1,5 +1,4 @@
 name: Build EXE
-
 on:
   push:
     tags: ['v*']
@@ -19,15 +18,22 @@ jobs:
           python-version: '3.11'
           architecture: ${{ matrix.arch }}
 
-      - run: pip install pywin32 pyinstaller
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pywin32 pyinstaller requests
 
-      - run: pyinstaller --onefile --name print_ticket_${{ matrix.arch }} print_ticket.py
-      - run: pyinstaller --onefile --name installer_${{ matrix.arch }} installer.py
+      - name: Build print_ticket
+        run: pyinstaller --onefile --name print_ticket_${{ matrix.arch }} print_ticket.py
+
+      - name: Build installer
+        run: pyinstaller --onefile --name installer_${{ matrix.arch }} installer.py
 
       - uses: actions/upload-artifact@v4
         with:
           name: print_ticket_${{ matrix.arch }}
           path: dist/print_ticket_${{ matrix.arch }}.exe
+
       - uses: actions/upload-artifact@v4
         with:
           name: installer_${{ matrix.arch }}
