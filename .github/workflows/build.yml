@@ -38,3 +38,13 @@ jobs:
         with:
           name: installer_${{ matrix.arch }}
           path: dist/installer_${{ matrix.arch }}.exe
+
+      - name: Upload to Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/print_ticket_${{ matrix.arch }}.exe
+            dist/installer_${{ matrix.arch }}.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
