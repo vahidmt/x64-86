@@ -127,10 +127,10 @@ def print_packages_table(hdc, ticket, y):
 
 def print_prices_table(hdc, ticket, y, fonts):
     fields = [
-        ("ارزش محصول", f"{ticket['marsoolPrice']} ت"),
+        ("ارزش محصول", f"{ticket['marsoolPrice']} ر"),
         ("روش پرداخت", ticket['paymentMethod']),
         ("تخفیف", f"{ticket['discountPrecentage']}%"),
-        ("مبلغ کل", f"{ticket['priceKoll']} ت"),
+        ("مبلغ کل", f"{ticket['priceKoll']} ر"),
     ]
     y = draw_fields(hdc, y, fields)
 
